@@ -1,0 +1,33 @@
+# Ship.gd
+extends CharacterBody2D
+
+# Player ID: 1 or 2
+@export var player_id: int = 1
+var speed: float = 200.0
+
+func _physics_process(delta: float) -> void:
+    # Only allow movement if it's this player's turn
+    if TurnManager.current_player == player_id:
+        var direction := 0.0
+
+        # Player 1 uses A/D keys, Player 2 uses Left/Right arrows
+        if player_id == 1:
+            if Input.is_action_pressed("move_left_p1"):
+                direction = -1
+            elif Input.is_action_pressed("move_right_p1"):
+                direction = 1
+        elif player_id == 2:
+            if Input.is_action_pressed("move_left_p2"):
+                direction = -1
+            elif Input.is_action_pressed("move_right_p2"):
+                direction = 1
+
+        velocity.x = direction * speed
+        move_and_slide()
+
+        # End turn when player presses Space/Enter
+        if Input.is_action_just_pressed("end_turn"):
+            TurnManager.switch_turn()
+    else:
+        velocity.x = 0
+        move_and_slide()
