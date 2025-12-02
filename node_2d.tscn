@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://drqwbjpicruiy"]
+
+[ext_resource type="Script" uid="uid://d3bmbv5cefu3" path="res://character_body_2d.gd" id="1_wtcfe"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0e48y"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+script = ExtResource("1_wtcfe")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("RectangleShape2D_0e48y")
+
+[node name="missles" type="Node2D" parent="."]
+
+[node name="missle dodger" type="Node2D" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="Timer2" type="Timer" parent="."]
