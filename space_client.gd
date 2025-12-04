@@ -1,93 +1,66 @@
-extends CharacterBody2D
+extends Node2D
 
-# Movement
-var speed := 200
+var score := 0
+@export var speed := 260.0
+
 var move_left := false
 var move_right := false
-var last_move_time := 0.0
-var cooldown := 4.0
 
-# Power level (set externally)
-var power := 1
-
-# Dodge effects
-var dodge_shoot_active := false
-var dodge_shield_active := false
-var dodge_power_active := false
-var dodge_effect_timer := 0.0
-
-# Precognition flag
-var precognition := true
+var server_ip = "10.184.1.88"
+var role = "pilot"
+var team = "tech"
 
 func _ready():
-	$LeftButton.connect("pressed", Callable(self, "_on_left_button_pressed"))
-	$LeftButton.connect("released", Callable(self, "_on_left_button_released"))
-	$RightButton.connect("pressed", Callable(self, "_on_right_button_pressed"))
-	$RightButton.connect("released", Callable(self, "_on_right_button_released"))
+	$Panel/ResetButton.visible = false
+	#$ScoreLabel.text = "Score: 0"
+	SpaceApi.server_connect(server_ip, role, team)
 
 func _physics_process(delta):
-	var direction := 0
+	var dir := 0.0
+	if move_left: dir -= 1.0
+	if move_right: dir += 1.0
+	position.x += dir * speed * delta
+	position.x = clamp(position.x, 24, get_viewport_rect().size.x - 24)
 
-	# Input
-	if Input.is_action_pressed("ui_left") or Input.is_key_pressed(KEY_A):
-		direction -= 1
-	if Input.is_action_pressed("ui_right") or Input.is_key_pressed(KEY_D):
-		direction += 1
-	if move_left:
-		direction -= 1
-	if move_right:
-		direction += 1
+func _on_BoostButton_pressed():
+	score += 1
+	_update_score()
 
-	# Cooldown logic
-	cooldown = max(0.0, 4.0 - (power - 1))
-	var now := Time.get_ticks_msec() / 1000.0
-	if direction != 0 and now - last_move_time >= cooldown:
-		last_move_time = now
-		velocity.x = direction * speed
-		_on_dodge_triggered()
-	else:
-		velocity.x = 0
+func _on_ShieldButton_pressed():
+	score += 1
+	_update_score()
 
-	move_and_slide()
+func _update_score():
+	$ScoreLabel.text = "Score: %d" % score
+	if score >= 10:
+		$ScoreLabel.text = "You Win!"
+		$BoostButton.disabled = true
+		$ShieldButton.disabled = true
+		$ResetButton.visible = true
 
-func _on_dodge_triggered():
-	if dodge_shoot_active:
-		_fire_laser()
-	if dodge_shield_active:
-		_add_shield()
-	if dodge_power_active:
-		_add_overcharge()
-	if power >= 6 and randi() % 2 == 0:
-		print("Dodged incoming attack!")
+func _on_ResetButton_pressed():
+	score = 0
+	$ScoreLabel.text = "Score: 0"
+	$BoostButton.disabled = false
+	$ShieldButton.disabled = false
+	$ResetButton.visible = false
 
-func _fire_laser():
-	print("Laser fired!")
+	
+	
+	
 
-func _add_shield():
-	print("Shield gained!")
 
-func _add_overcharge():
-	print("Overcharge gained!")
+func _on_left_button_pressed() -> void:
+	SpaceApi.move("left")
 
-# Button handlers
-func _on_left_button_pressed():
-	move_left = true
 
-func _on_left_button_released():
-	move_left = false
+func _on_right_button_pressed() -> void:
+	SpaceApi.move("right")
 
-func _on_right_button_pressed():
-	move_right = true
 
-func _on_right_button_released():
-	move_right = false
+func _on_special_button_pressed() -> void:
+	SpaceApi.special()
 
-# Precognition dodge (call this when hit is detected)
-func precognition_dodge():
-	if precognition:
-		var left_or_right := randi() % 2
-		if left_or_right == 0:
-			position.x = 0
-		else:
-			position.x = get_viewport_rect().size.x - self.size.x
-		print("Precognition dodge activated!")
+
+func _on_precognition_button_pressed() -> void:
+	SpaceApi.precognition()

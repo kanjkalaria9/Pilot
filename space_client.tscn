@@ -1,12 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://crxnr4do2wh0c"]
+[gd_scene load_steps=4 format=3 uid="uid://crxnr4do2wh0c"]
 
 [ext_resource type="Script" uid="uid://dtblpnl2g18l4" path="res://space_client.gd" id="1_ecx65"]
-[ext_resource type="Script" uid="uid://d06ii22isdaog" path="res://left_button.gd" id="2_wtost"]
 [ext_resource type="Script" uid="uid://du50t16hm6k7i" path="res://ship.gd" id="3_ox6m4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ox6m4"]
 
-[node name="HeistClient" type="Node2D"]
+[node name="RetroPilot" type="Node2D"]
 script = ExtResource("1_ecx65")
 
 [node name="Panel" type="Panel" parent="."]
@@ -20,7 +19,6 @@ offset_top = 97.0
 offset_right = 165.0
 offset_bottom = 140.0
 text = "LEFT"
-script = ExtResource("2_wtost")
 
 [node name="RightButton" type="Button" parent="Panel"]
 layout_mode = 0
@@ -38,6 +36,28 @@ offset_right = 298.0
 offset_bottom = 315.0
 text = "Connect"
 
+[node name="ResetButton" type="Button" parent="Panel"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="Special button" type="Button" parent="Panel"]
+layout_mode = 0
+offset_left = 174.0
+offset_top = 187.0
+offset_right = 244.0
+offset_bottom = 218.0
+text = "SPECIAL"
+
+[node name="Precognition Button" type="Button" parent="Panel"]
+layout_mode = 0
+offset_left = 345.0
+offset_top = 182.0
+offset_right = 451.0
+offset_bottom = 213.0
+text = "Precognition
+"
+
 [node name="Ship" type="CharacterBody2D" parent="."]
 script = ExtResource("3_ox6m4")
 
@@ -47,3 +67,5 @@ shape = SubResource("RectangleShape2D_ox6m4")
 [connection signal="pressed" from="Panel/LeftButton" to="." method="_on_left_button_pressed"]
 [connection signal="pressed" from="Panel/RightButton" to="." method="_on_right_button_pressed"]
 [connection signal="pressed" from="Panel/ConnectButton" to="." method="_on_connect_pressed"]
+[connection signal="pressed" from="Panel/Special button" to="." method="_on_special_button_pressed"]
+[connection signal="pressed" from="Panel/Precognition Button" to="." method="_on_precognition_button_pressed"]
