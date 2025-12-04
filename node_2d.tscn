@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://drqwbjpicruiy"]
 
 [ext_resource type="Script" uid="uid://dje2hcgpf2val" path="res://node_2d.gd" id="1_wtcfe"]
-[ext_resource type="Script" uid="uid://becb12xhvue2g" path="res://resetbuttton.gd" id="2_0e48y"]
+[ext_resource type="Texture2D" uid="uid://2hf6l4h4ibm4" path="res://icon.svg" id="3_epypp"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_wtcfe")
@@ -21,7 +21,14 @@ offset_bottom = 23.0
 [node name="ResetButton" type="Button" parent="."]
 offset_right = 8.0
 offset_bottom = 8.0
-text = "Reset"
-script = ExtResource("2_0e48y")
+text = "Rest"
+
+[node name="ImageButton" type="TextureButton" parent="."]
+offset_left = 310.0
+offset_top = 103.0
+offset_right = 438.0
+offset_bottom = 231.0
+texture_normal = ExtResource("3_epypp")
 
 [connection signal="pressed" from="ResetButton" to="." method="_on_resetbuttton_pressed"]
+[connection signal="pressed" from="ImageButton" to="." method="_on_image_button_pressed"]
